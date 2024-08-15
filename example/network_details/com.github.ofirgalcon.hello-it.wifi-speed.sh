@@ -5,18 +5,20 @@
 . "$HELLO_IT_SCRIPT_SH_LIBRARY/com.github.ygini.hello-it.scriptlib.sh"
 
 function getWifiSpeed {
-    speed=$(/System/Library/PrivateFrameworks/Apple*.framework/Versions/Current/Resources/airport -I | grep lastTx | sed -e 's/^.*://g' )    
-    echo "$speed Mbps"
+    wifi=$(head -n50 /tmp/wifi-scan.txt)
+    speedLine=$(echo "$wifi" | grep "Tx" | cut -d ':' -f 2)
+    echo "$speedLine"
 }
 
 function updateTitleWithArgs {
     title=$(getWifiSpeed)
-    updateTitle "WiFi speed: $title"
+    updateTitle "WiFi Speed: $title"
+    updateTooltip "Get WiFi Speed."
 }
 
 function onClickAction {
     updateTitleWithArgs "$@"
-    getHostname | pbcopy
+    getWifiSpeed | pbcopy
 }
 
 function fromCronAction {
@@ -31,6 +33,6 @@ function onNetworkAction {
 	updateTitleWithArgs "$@"
 }
 
-main "$@"
+main $@
 
 exit 0
