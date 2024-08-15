@@ -5,22 +5,24 @@
 . "$HELLO_IT_SCRIPT_SH_LIBRARY/com.github.ygini.hello-it.scriptlib.sh"
 
 function getWifiSNR {
-	wifi=$(/System/Library/PrivateFrameworks/Apple*.framework/Versions/Current/Resources/airport -I)
-    signal=$(echo "$wifi" | grep CtlRSSI | sed -e 's/^.*://g')
-    noise=$(echo "$wifi" | grep CtlNoise | sed -e 's/^.*://g')
-    SNR=$((signal-noise))
-
-    echo "$SNR dBm"
+	wifi=$(head -n50 /tmp/wifi-scan.txt)
+	noiseLine=$(echo "$wifi" | grep "Noise" | cut -d ':' -f 2)
+	noise=${noiseLine%dBm}
+	signalLine=$(echo "$wifi" | grep "RSSI" | cut -d ':' -f 2)
+	signal=${signalLine%dBm}
+    SNR=$(($signal-$noise))
+    echo "$SNR"
 }
 
 function updateTitleWithArgs {
     title=$(getWifiSNR)
     updateTitle "WiFi SNR: $title"
+    updateTooltip "Get WiFi Signal to Noise Ratio."
 }
 
 function onClickAction {
     updateTitleWithArgs "$@"
-    getHostname | pbcopy
+    getWifiSNR | pbcopy
 }
 
 function fromCronAction {
@@ -35,6 +37,6 @@ function onNetworkAction {
 	updateTitleWithArgs "$@"
 }
 
-main "$@"
+main $@
 
 exit 0
