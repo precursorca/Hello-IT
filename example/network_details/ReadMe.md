@@ -1,10 +1,9 @@
-## Pending Munki Updates
+## Hello-IT Networking Details Scripts
 ---
-##### Author: [Zack McCauley](https://www.github.com/WardsParadox)
 
 ### Description:
-All munki related Hello-IT scripts and preferences dwell here. There is an included preference file that you can drop in place as well!
+Some Networking scripts based on Ofirgalcon scripts shared in Slack Hello-IT channel
+Both the speed and the signal script rely on a wifi-scan script that requires sudo so is run via a LaunchDaemon.
 
-### Current Scripts Included in Preference File:
-Manifest Name: Shows current manifest associated with MSC
-Pending Update Count: Shows current number of pending MSC Updates
+### Current:
+
